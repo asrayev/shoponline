@@ -4,16 +4,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:shoponline/ui/main/pages/home/product_item_page.dart';
 import 'package:shoponline/utils/my_colors.dart';
 import 'package:shoponline/view_model/products_veiw_model.dart';
-import '../../../data/models/category.dart';
-import '../../../data/models/product_model.dart';
-import '../../../utils/myMediaquery.dart';
-import '../../../view_model/category_view_model.dart';
-import '../../../view_model/login_view_model.dart';
+import '../../../../data/models/category.dart';
+import '../../../../data/models/product_model.dart';
+import '../../../../utils/myMediaquery.dart';
+import '../../../../view_model/category_view_model.dart';
+import '../../../../view_model/login_view_model.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+
+
   HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String categoryIdControl = "";
 
   @override
   Widget build(BuildContext context) {
@@ -65,20 +75,26 @@ class HomePage extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           itemCount: categories.length,
                           itemBuilder: (context, index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 10, left: 10, bottom: 10),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: MyColors.C_F5B88C,
-                                      borderRadius: BorderRadius.circular(14)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 15, left: 15),
-                                    child: Center(
-                                        child: Text(
-                                            categories[index].categoryName)),
-                                  )),
+                            return InkWell(
+                              onTap: ((){
+                                categoryIdControl = categories[index].categoryId;
+                                    Provider.of<ProductViewModel>(context,listen: false).listenProducts(categories[index].categoryId);
+                              }),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 10, left: 10, bottom: 10),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: MyColors.C_F5B88C,
+                                        borderRadius: BorderRadius.circular(14)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 15, left: 15),
+                                      child: Center(
+                                          child: Text(
+                                              categories[index].categoryName)),
+                                    )),
+                              ),
                             );
                           });
                     } else {
@@ -89,38 +105,31 @@ class HomePage extends StatelessWidget {
                   },
                 ),
               ),
-              StreamBuilder(
-                 stream: Provider.of<ProductViewModel>(context, listen: false).listenProducts1(),
-                 builder: (context, snapshot) {
-
-                   if (snapshot.hasData){
-                     List<ProductModel> products = snapshot.data!;
-                     return Container(
+                  Consumer<ProductViewModel>(
+                builder: (context, productViewModel, child) {
+                           // productViewModel.products;
+                  return  Container(
                     height: m_h(context) * 0.8,
                        child: GridView.builder(
                         shrinkWrap: true,
-                       itemCount: products.length,
+                       itemCount:  productViewModel.products.length,
                         physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 2.5 / 3.1,
                         mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,),
-                      itemBuilder: (BuildContext context, int index) {
+                          crossAxisSpacing: 12,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
 
-                          return buildPadding(products, index);
-                      },
-    ));}
-                   else {
-                     return Container(
-                     child: const Center(
-                       child: CircularProgressIndicator(),
-                     ),
-                   );
+                          return buildPadding( productViewModel.products, index);
+                        },
+                       )
+                     );
+
                    }
-
-                   ;},
+                   ,
               )
             ],
           ),
@@ -134,7 +143,7 @@ class HomePage extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: InkWell(
                             onTap: (() {
-
+                               Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductItemWidget(model: products[index],)));
                             }),
                             child: Container(
                               decoration: BoxDecoration(

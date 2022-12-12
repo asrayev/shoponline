@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shoponline/data/login_register/auth.dart';
 import 'package:shoponline/ui/Login/login_page.dart';
 import 'package:shoponline/ui/Login/sign_up_page.dart';
-import 'package:shoponline/ui/main/pages/home_page.dart';
+import 'package:shoponline/ui/main/pages/home/home_page.dart';
 import 'package:shoponline/ui/Login/login_and_register_page.dart';
 import 'package:provider/provider.dart';
 

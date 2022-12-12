@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shoponline/view_model/products_veiw_model.dart';
 import '../../../data/models/category.dart';
 import '../../../data/models/forDropDownList.dart';
+import '../../../data/models/product_model.dart';
 import '../../../view_model/category_view_model.dart';
 
 class CartPage extends StatelessWidget {
@@ -11,15 +13,15 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: Provider.of<CategoriesViewModel>(context,listen: false).listenCategories(),
+        stream: Provider.of<ProductViewModel>(context,listen: false).listenProducts1(),
         builder: (context, snapshot) {
           if(snapshot.hasData){
-            List<CategoryModel> categories= snapshot.data!;
+            List<ProductModel> categories= snapshot.data!;
             return ListView(
               children: List.generate(categories.length, (index) {
-                CategoryModel category = categories[index];
+                ProductModel category = categories[index];
                 return ListTile(
-                  title: Text(category.categoryName),
+                  title: Text(category.productName),
                   trailing: SizedBox(
                     width: 100,
                     child: Row(
@@ -36,7 +38,7 @@ class CartPage extends StatelessWidget {
                         IconButton(
                             onPressed: () async {
 
-                              await context.read<CategoriesViewModel>().deleteCategory(category.categoryId);
+                              await context.read<ProductViewModel>().deleteProduct(categories[index].productId);
                             },
                             icon: const Icon(Icons.delete)),
                       ],

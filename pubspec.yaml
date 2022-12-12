@@ -59,6 +59,7 @@ dependencies:
   firebase_in_app_messaging: ^0.7.0+7
   cached_network_image: ^3.2.1
   animated_snack_bar: ^0.3.0
+  google_fonts: ^3.0.1
 
 
 
