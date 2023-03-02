@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shoponline/ui/Login/sign_up_page.dart';
 import 'package:shoponline/ui/main/pages/home/home_page.dart';
 import 'package:shoponline/utils/my_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:email_validator/email_validator.dart';
+import '../../data/models/user_model.dart';
 import '../../view_model/login_view_model.dart';
+import '../../view_model/profil_view_model.dart';
 
 class LoginPage1 extends StatefulWidget {
   const LoginPage1({Key? key}) : super(key: key);
@@ -147,6 +150,17 @@ class _LoginPage1State extends State<LoginPage1> {
                           .signInWithEmailAndPassword(
                           password: _controllerPassword.text.trim(),
                           email: _controllerEmail.text.trim());
+
+                      // Provider.of<ProfileViewModel>(context,listen: false).addUser(
+                      //   UserModel(
+                      //     age: 0,
+                      //     userId: FirebaseAuth.instance.currentUser!.uid,
+                      //     fullName: "",
+                      //     email: _controllerEmail.text.trim(),
+                      //     createdAt: DateTime.now().toString(),
+                      //     imageUrl: "",
+                      // //   ),
+                      // );
                     } else {
                       return;
                     }

@@ -1,14 +1,18 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shoponline/ui/admin_page/admin_main_page.dart';
 import 'package:shoponline/ui/main/pages/cart_page.dart';
 import 'package:shoponline/ui/main/pages/home/home_page.dart';
+import 'package:shoponline/ui/main/pages/profile_page.dart';
 import 'package:shoponline/ui/main/pages/search_page.dart';
 import 'package:shoponline/utils/icon.dart';
 import 'package:shoponline/utils/myMediaquery.dart';
-
+import 'package:provider/provider.dart';
+import '../../data/models/user_model.dart';
 import '../../utils/my_colors.dart';
+import '../../view_model/profil_view_model.dart';
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -21,11 +25,33 @@ class _MainPageState extends State<MainPage> {
   List pages=[
     HomePage(),
     SearchPage(),
-    CartPage(),
-    Container()
+    Container(),
+    ProfilePage()
   ];
+
+  _printFCMToken() async {
+    FirebaseMessaging.instance.subscribeToTopic("users");
+    String? token = await FirebaseMessaging.instance.getToken();
+    if (!mounted) return;
+    UserModel? userModel =
+        Provider.of<ProfileViewModel>(context, listen: false).userModel;
+    if (userModel != null) {
+      Provider.of<ProfileViewModel>(context, listen: false)
+          .updateFCMToken(token ?? "", userModel.userId);
+    }
+
+    print("FCM TOKEN:$token");
   @override
+  void initState() {
+    _printFCMToken();
+  }
+    // TODO: implement initState
+
+  }
+  @override
+
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Stack(
         children: [

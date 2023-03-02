@@ -1,40 +1,81 @@
+class OrderModel {
+  int count;
+  int totalPrice;
+  String orderId;
+  String productId;
+  String userId;
+  String orderStatus;
+  String createdAt;
+  String productName;
 
-class Order {
-  Order({
-    this.orderId,
-    this.productId,
-    this.count,
-    this.totalPrice,
-    this.createdAt,
-    this.userId,
-    this.orderStatus,
+  OrderModel({
+    required this.count,
+    required this.totalPrice,
+    required this.orderId,
+    required this.productId,
+    required this.userId,
+    required this.orderStatus,
+    required this.createdAt,
+    required this.productName,
   });
 
-  int? orderId;
-  int? productId;
-  int? count;
-  int? totalPrice;
-  String? createdAt;
-  int? userId;
-  String? orderStatus;
+  OrderModel copWith({
+    int? count,
+    int? totalPrice,
+    String? orderId,
+    String? productId,
+    String? userId,
+    String? orderStatus,
+    String? createdAt,
+    String? productName,
+  }) =>
+      OrderModel(
+        count: count ?? this.count,
+        totalPrice: totalPrice ?? this.totalPrice,
+        orderId: orderId ?? this.orderId,
+        productId: productId ?? this.productId,
+        productName: productName ?? this.productName,
+        userId: userId ?? this.userId,
+        orderStatus: orderStatus ?? this.orderStatus,
+        createdAt: createdAt ?? this.createdAt,
+      );
 
-  factory Order.fromJson(Map<String, dynamic> json) => Order(
-    orderId: json["order_id"],
-    productId: json["product_id"],
-    count: json["count"],
-    totalPrice: json["total_price"],
-    createdAt: json["created_at"],
-    userId: json["user_id"],
-    orderStatus: json["order_status"],
-  );
+  factory OrderModel.fromJson(Map<String, dynamic> jsonData) {
+    return OrderModel(
+      count: jsonData['count'] as int? ?? 0,
+      totalPrice: jsonData['totalPrice'] as int? ?? 0,
+      orderId: jsonData['orderId'] as String? ?? '',
+      productName: jsonData['productName'] as String? ?? '',
+      productId: jsonData['productId'] as String? ?? '',
+      userId: jsonData['userId'] as String? ?? '',
+      orderStatus: jsonData['orderStatus'] as String? ?? '',
+      createdAt: jsonData['createdAt'] as String? ?? '',
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-    "order_id": orderId,
-    "product_id": productId,
-    "count": count,
-    "total_price": totalPrice,
-    "created_at": createdAt,
-    "user_id": userId,
-    "order_status": orderStatus,
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      'count': count,
+      'totalPrice': totalPrice,
+      'orderId': orderId,
+      'productId': productId,
+      'userId': userId,
+      'orderStatus': orderStatus,
+      'createdAt': createdAt,
+      'productName': productName,
+    };
+  }
+
+  @override
+  String toString() {
+    return '''
+      count: $count,
+      totalPrice: $totalPrice,
+      orderId: $orderId,
+      productId: $productId,
+      userId: $userId,
+      orderStatus: $orderStatus,
+      createdAt: $createdAt,
+      ''';
+  }
 }

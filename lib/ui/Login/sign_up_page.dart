@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shoponline/ui/main/pages/home/home_page.dart';
 import 'package:shoponline/utils/my_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:email_validator/email_validator.dart';
+import '../../data/models/user_model.dart';
 import '../../utils/my_utils.dart';
 import '../../view_model/login_view_model.dart';
+import '../../view_model/profil_view_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -191,6 +195,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           .sigUpcreateUserWithEmailAndPassword(
                           password: _controllerPassword.text.trim(),
                           email: _controllerEmail.text.trim());
+                      signUp();
+
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
                     } else {
                       return;
@@ -218,7 +224,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  signUp() {
+  signUp() async {
     final isValid = _formkey.currentState!.validate();
     if (!isValid) return;
     String email = _controllerEmail.text.trim();
@@ -226,10 +232,34 @@ class _SignUpPageState extends State<SignUpPage> {
     String confirmPassword = _controllerPassword1.text.trim();
 
     if (confirmPassword == password) {
+
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+      if(!mounted) return;
+      await Provider.of<ProfileViewModel>(context, listen: false).addUser(
+        UserModel(
+            docId: "",
+            age: 0,
+            userId: FirebaseAuth.instance.currentUser!.uid,
+            fullName: "",
+            email: email,
+            createdAt: DateTime.now().toString(),
+            imageUrl: "",
+            fcmToken: fcmToken ?? ""),
+      );
       Provider.of<AuthViewModel>(context,listen: false).sigUpcreateUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      // Provider.of<ProfileViewModel>(context,listen: false).addUser(
+      //   UserModel(
+      //     age: 0,
+      //     userId: FirebaseAuth.instance.currentUser!.uid,
+      //     fullName: "",
+      //     email: _controllerEmail.text.trim(),
+      //     createdAt: DateTime.now().toString(),
+      //     imageUrl: "",
+      //   ),
+      // );
     } else {
       MyUtils.getMyToast(message: "Passwords don't match!");
     }

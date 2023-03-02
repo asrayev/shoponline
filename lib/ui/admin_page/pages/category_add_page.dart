@@ -230,3 +230,4 @@ class _CategoryAddPageState extends State<CategoryAddPage> {
     );
   }
 }
+//  if (Uri.parse(value!).isAbsolute ==

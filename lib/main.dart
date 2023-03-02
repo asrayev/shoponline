@@ -8,10 +8,14 @@ import 'package:provider/provider.dart';
 import 'package:shoponline/ui/main/mainPage.dart';
 import 'package:shoponline/view_model/category_view_model.dart';
 import 'package:shoponline/view_model/login_view_model.dart';
+import 'package:shoponline/view_model/order_view_model.dart';
 import 'package:shoponline/view_model/products_veiw_model.dart';
+import 'package:shoponline/view_model/profil_view_model.dart';
 import 'data/login_register/auth.dart';
 import 'data/repositories/categories_repository.dart';
+import 'data/repositories/orders_repository.dart';
 import 'data/repositories/products_repository.dart';
+import 'data/repositories/profil_repository.dart';
 
 void main()  async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +36,19 @@ void main()  async {
             productRepository: ProductRepository(
               firebaseFirestore: fireStore,
             ),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => OrdersViewModel(
+            ordersRepository: OrdersRepository(
+              firebaseFirestore: fireStore,
+            ),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProfileViewModel(
+              firebaseAuth: FirebaseAuth.instance,
+              profileRepository: ProfileRepository(firebaseFirestore: fireStore)
           ),
         ),
         Provider(
@@ -56,7 +73,7 @@ class MyApp extends StatelessWidget {
       builder: (BuildContext contex, Widget? child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: MainPage(),
+          home: WidgetTree(),
         );
       },
     );

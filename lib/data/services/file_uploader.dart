@@ -23,8 +23,4 @@ class FileUploader {
     print("FILE DOWNLOAD URL:$downloadUrl");
     return downloadUrl;
   }
-
-
 }
-// shu joyini ham togirlash kerakmasmidi
-// buyo to'ri

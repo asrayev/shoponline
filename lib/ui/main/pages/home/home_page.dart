@@ -71,6 +71,7 @@ class _HomePageState extends State<HomePage> {
                       // List allCategories = ["All"]+ listcategory.map((item) => categories[item].categoryName).toList();
 
                       return ListView.builder(
+
                           physics: BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           itemCount: categories.length,

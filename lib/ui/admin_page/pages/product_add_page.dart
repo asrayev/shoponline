@@ -36,7 +36,7 @@ class _ProductAddPageState extends State<ProductAddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.C_0F1620,
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Form(
@@ -46,11 +46,11 @@ class _ProductAddPageState extends State<ProductAddPage> {
               children: [
                 SizedBox(height: 70.h,),
                 Container(
-                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
                   width: 100.w,
                   height: 100.h,
                   child: imageUrl.isEmpty
-                      ? Icon(Icons.image)
+                      ? const Icon(Icons.image)
                       : Image.network(
                     imageUrl,
                     fit: BoxFit.cover,
@@ -61,7 +61,7 @@ class _ProductAddPageState extends State<ProductAddPage> {
                     _showPicker(context);
 
                   },
-                  child: Text("Select Image"),
+                  child: const Text("Select Image"),
                 ),
 
                 StreamBuilder(
@@ -71,7 +71,7 @@ class _ProductAddPageState extends State<ProductAddPage> {
                 List<CategoryModel>? categories=snapshot.data;
                 return DropdownButtonHideUnderline(
                 child: DropdownButton(
-                hint:  Text(choosenCategory, style: TextStyle(color: Colors.white),),
+                hint:  Text(choosenCategory, style: const TextStyle(color: Colors.white),),
 
                 items: categories?.map((e) => DropdownMenuItem(
                 onTap: (){
@@ -83,18 +83,20 @@ class _ProductAddPageState extends State<ProductAddPage> {
                 child: Text(e.categoryName))).toList(),
                 onChanged: (value) {},));
                 }
-                else return Container();
+                else {
+                  return Container();
+                }
                 }),
 
-                mytextfield(_productNameController, "Name"),
+                myTextField(_productNameController, "Name"),
                  SizedBox(height: 10.h,),
-                mytextfield(_priceController, "Price"),
+                myTextField(_priceController, "Price"),
                 SizedBox(height: 10.h,),
-                mytextfield(_countController, "Count"),
+                myTextField(_countController, "Count"),
                 SizedBox(height: 10.h,),
-                mytextfield(_descriptionController, "Description"),
+                myTextField(_descriptionController, "Description"),
                 SizedBox(height: 10.h,),
-                mytextfield(_currencyController, "Currency"),
+                myTextField(_currencyController, "Currency"),
                 SizedBox(height: 10.h,),
 
 
@@ -144,7 +146,7 @@ class _ProductAddPageState extends State<ProductAddPage> {
     );
   }
 
-  Padding mytextfield(TextEditingController controllerText, String hinttext) {
+  Padding myTextField(TextEditingController controllerText, String hintText) {
     return Padding(
       padding: const EdgeInsets.only(right: 25, left: 25),
       child: Container(
@@ -156,29 +158,30 @@ class _ProductAddPageState extends State<ProductAddPage> {
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
                 blurRadius: 3,
-                offset: Offset(1, 1), // Shadow position
+                offset: const Offset(1, 1), // Shadow position
               ),
             ]),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.only(left: 20),
+            padding: const EdgeInsets.only(left: 20),
             child: TextFormField(
               cursorHeight: 25.h,
               cursorColor: Colors.blue,
               validator: (value) {
-                if (value!.length < 1) return "Enter $hinttext";
+                if (value!.isEmpty) return "Enter $hintText";
+
               },
               controller: controllerText,
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.emailAddress,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.grey,
                 fontSize: 17,
                 height: 25.0 / 15,
               ),
               decoration: InputDecoration(
-                hintStyle: TextStyle(color: Colors.grey),
-                hintText: hinttext,
+                hintStyle: const TextStyle(color: Colors.grey),
+                hintText: hintText,
                 enabledBorder: UnderlineInputBorder(
                   borderSide:
                   BorderSide(color: Colors.white.withOpacity(0)),
@@ -260,7 +263,7 @@ class _ProductAddPageState extends State<ProductAddPage> {
   void showSnackBar(){
      AnimatedSnackBar.rectangle(
        'Warning',
-       "Rasm pasm categoriyalarni hammasini to'ldiring!",
+       "Please fill all fields bro",
        type: AnimatedSnackBarType.error,
        brightness: Brightness.dark,
      ).show(
@@ -272,7 +275,7 @@ class _ProductAddPageState extends State<ProductAddPage> {
   void showSnackBarSuccess(){
     AnimatedSnackBar.rectangle(
       'Good job',
-      "FireBasega qo'shib keldik shep",
+      "I have added to Firebase man",
       type: AnimatedSnackBarType.success,
       brightness: Brightness.dark,
     ).show(
